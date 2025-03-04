@@ -9,7 +9,9 @@ export default function Chatbot() {
     { role: "bot", content: "Hello! Welcome to Royal Udaipur. How can I assist you today?" },
   ])
   const [input, setInput] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef(null)
+  const API_URL = process.env.NEXT_PUBLIC_API_URL
 
   const toggleChat = () => {
     setIsOpen(!isOpen)
@@ -19,35 +21,34 @@ export default function Chatbot() {
     setInput(e.target.value)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!input.trim()) return
 
     // Add user message
     setMessages((prev) => [...prev, { role: "user", content: input }])
+    setIsLoading(true)
 
-    // Simulate bot response
-    setTimeout(() => {
-      let botResponse = "Thank you for your message. Our team will get back to you shortly."
+    try {
+      const response = await fetch(`${API_URL}/chat/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: input }),
+      })
 
-      // Simple keyword-based responses
-      const lowerInput = input.toLowerCase()
-      if (lowerInput.includes("reservation") || lowerInput.includes("book") || lowerInput.includes("table")) {
-        botResponse =
-          "You can make a reservation by visiting our reservation section or calling us at (555) 123-4567. Would you like me to help you with anything else?"
-      } else if (lowerInput.includes("menu") || lowerInput.includes("food") || lowerInput.includes("dish")) {
-        botResponse =
-          "Our menu features a variety of authentic Indian dishes. You can view our full menu on the Menu page. Do you have any specific dishes you're interested in?"
-      } else if (lowerInput.includes("hour") || lowerInput.includes("open") || lowerInput.includes("time")) {
-        botResponse =
-          "We are open Monday-Thursday from 5:00 PM to 10:00 PM, Friday-Saturday from 5:00 PM to 11:00 PM, and Sunday from 4:00 PM to 9:00 PM."
-      } else if (lowerInput.includes("location") || lowerInput.includes("address") || lowerInput.includes("where")) {
-        botResponse =
-          "We are located at 123 Main Street, New York, NY 10001. You can find directions on our Contact page."
-      }
-
-      setMessages((prev) => [...prev, { role: "bot", content: botResponse }])
-    }, 1000)
+      const data = await response.json()
+      setMessages((prev) => [...prev, { role: "bot", content: data.response }])
+    } catch (error) {
+      console.error("Error:", error)
+      setMessages((prev) => [
+        ...prev,
+        { role: "bot", content: "Sorry, something went wrong. Please try again later." },
+      ])
+    } finally {
+      setIsLoading(false)
+    }
 
     // Clear input
     setInput("")
@@ -104,8 +105,9 @@ export default function Chatbot() {
             <button
               type="submit"
               className="bg-royal-blue text-white px-4 py-2 rounded-r-md hover:bg-dark-blue transition-colors"
+              disabled={isLoading}
             >
-              <Send size={20} />
+              {isLoading ? "..." : <Send size={20} />}
             </button>
           </form>
         </div>

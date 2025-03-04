@@ -24,26 +24,30 @@ export default function Reservation() {
     }))
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // In a real app, you would send this data to your backend
-    console.log("Reservation data:", formData)
-    setIsSubmitted(true)
-
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setIsSubmitted(false)
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        date: "",
-        time: "",
-        guests: 2,
-        specialRequests: "",
-      })
-    }, 3000)
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await api.createReservation(formData);
+      setIsSubmitted(true);
+      
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          date: "",
+          time: "",
+          guests: 2,
+          specialRequests: "",
+        });
+      }, 3000);
+    } catch (error) {
+      console.error("Reservation failed:", error);
+      alert("There was a problem with your reservation. Please try again.");
+    }
+  };
 
   return (
     <section className="py-20 bg-royal-blue text-white">

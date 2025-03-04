@@ -1,103 +1,65 @@
-import MenuHeader from "@/components/MenuHeader"
-import MenuSection from "@/components/MenuSection"
-import Chatbot from "@/components/Chatbot"
+import MenuHeader from "@/components/MenuHeader";
+import MenuSection from "@/components/MenuSection";
+import Chatbot from "@/components/Chatbot";
 
 export default function MenuPage() {
-  const appetizers = [
-    {
-      id: 1,
-      name: "Vegetable Samosas",
-      description: "Crispy pastry filled with spiced potatoes and peas",
-      price: "$6.99",
-      image: "/images/samosa.jpg",
-    },
-    {
-      id: 2,
-      name: "Onion Bhaji",
-      description: "Crispy onion fritters with chickpea flour and spices",
-      price: "$5.99",
-      image: "/images/bhaji.jpg",
-    },
-    {
-      id: 3,
-      name: "Paneer Tikka",
-      description: "Marinated cottage cheese cubes grilled in tandoor",
-      price: "$8.99",
-      image: "/images/paneer-tikka.jpg",
-    },
-  ]
+  const indianShortPlates = [
+    { id: 1, name: "Doodhiya Murgh Ka Bootha", description: "Creamy chicken morsels marinated in hung curd and cheese, cooked in a tandoor", price: "₹1200", image: "/images/samosa.jpg" },
+    { id: 2, name: "SharaBi Jhinga", description: "Prawns marinated with local liqueur and spices, cooked in clay oven", price: "₹1500", image: "/images/samosa.jpg" },
+    { id: 3, name: "Paneer Tikka", description: "Cottage cheese marinated with cream, black stone flower, and homemade spices", price: "₹1100", image: "/images/samosa.jpg" },
+  ];
 
-  const mainCourses = [
-    {
-      id: 1,
-      name: "Butter Chicken",
-      description: "Tender chicken cooked in a rich tomato and butter sauce",
-      price: "$16.99",
-      image: "/images/butter-chicken.jpg",
-    },
-    {
-      id: 2,
-      name: "Palak Paneer",
-      description: "Cottage cheese cubes in a creamy spinach sauce",
-      price: "$14.99",
-      image: "/images/palak-paneer.jpg",
-    },
-    {
-      id: 3,
-      name: "Lamb Rogan Josh",
-      description: "Aromatic lamb curry with Kashmiri spices",
-      price: "$18.99",
-      image: "/images/rogan-josh.jpg",
-    },
-  ]
+  const soups = [
+    { id: 1, name: "Elaichi Paya Ka Shorba", description: "Lamb trotter’s broth served with lemon wedge", price: "₹600", image: "/images/samosa.jpg" },
+    { id: 2, name: "Dal Nariyal Ka Shorba", description: "South Indian delicacy of lentil extract, peppercorn, and coconut milk", price: "₹500", image: "/images/samosa.jpg" },
+  ];
+
+  const indianMainCourse = [
+    { id: 1, name: "Purani Delhi Style Butter Chicken", description: "Boneless chicken cooked with butter, cream, and rich tomato gravy", price: "₹1300", image: "/images/samosa.jpg" },
+    { id: 2, name: "Paneer Makhan Wala", description: "Cottage cheese simmered in tomato gravy, topped with cream", price: "₹1200", image: "/images/samosa.jpg" },
+  ];
+
+  const biryaniRice = [
+    { id: 1, name: "Murgh Masaledar Biryani", description: "Popular chicken biryani spiced with home ground spices", price: "₹1400", image: "/images/samosa.jpg" },
+    { id: 2, name: "Shahi Subz Biryani", description: "Basmati rice with seasonal vegetables, cooked on dum", price: "₹1200", image: "/images/samosa.jpg" },
+  ];
+
+  const indianBreads = [
+    { id: 1, name: "Laccha Paratha", description: "Layered whole wheat paratha", price: "₹200", image: "/images/samosa.jpg" },
+    { id: 2, name: "Naan", description: "Soft tandoori naan", price: "₹200", image: "/images/samosa.jpg" },
+  ];
 
   const desserts = [
-    {
-      id: 1,
-      name: "Gulab Jamun",
-      description: "Deep-fried milk solids soaked in sugar syrup",
-      price: "$5.99",
-      image: "/images/gulab-jamun.jpg",
-    },
-    {
-      id: 2,
-      name: "Rasmalai",
-      description: "Soft cottage cheese dumplings in sweetened milk",
-      price: "$6.99",
-      image: "/images/rasmalai.jpg",
-    },
-  ]
+    { id: 1, name: "Anjeer Badam Halwa", description: "Grounded almond paste and fig cooked with clarified butter and milk", price: "₹800", image: "/images/samosa.jpg" },
+    { id: 2, name: "Kesari Angoori Rasmalai", description: "Poached cottage cheese laced with saffron", price: "₹800", image: "/images/samosa.jpg" },
+  ];
 
-  const beverages = [
-    {
-      id: 1,
-      name: "Mango Lassi",
-      description: "Refreshing yogurt drink with mango pulp",
-      price: "$4.99",
-      image: "/images/mango-lassi.jpg",
-    },
-    {
-      id: 2,
-      name: "Masala Chai",
-      description: "Traditional Indian spiced tea",
-      price: "$3.99",
-      image: "/images/masala-chai.jpg",
-    },
-  ]
+  const comfortFood = [
+    { id: 1, name: "Poori Bhaji", description: "Deep fried bread accompanied with spicy potato bhaji", price: "₹900", image: "/images/samosa.jpg" },
+    { id: 2, name: "Khichdi", description: "Over-cooked rice and yellow lentil served with curd and ghee", price: "₹900", image: "/images/samosa.jpg" },
+  ];
+
+  const tajSignatureDishes = [
+    { id: 1, name: "Cobb Salad", description: "American garden salad with chicken, bacon, avocado, and buttermilk dressing", price: "₹1200", image: "/images/samosa.jpg" },
+    { id: 2, name: "Nasi Goreng", description: "Malaysian fried rice with chicken, fried prawns, and condiments", price: "₹1500", image: "/images/samosa.jpg" },
+  ];
 
   return (
     <div className="bg-cream min-h-screen">
       <MenuHeader />
 
       <div className="container mx-auto px-4 py-12">
-        <MenuSection title="Appetizers" items={appetizers} />
-        <MenuSection title="Main Courses" items={mainCourses} />
+        <MenuSection title="Indian Short Plates & Deep Bowl" items={indianShortPlates} />
+        <MenuSection title="Soups" items={soups} />
+        <MenuSection title="Indian Main Course" items={indianMainCourse} />
+        <MenuSection title="Biryani & Rice" items={biryaniRice} />
+        <MenuSection title="Indian Breads" items={indianBreads} />
         <MenuSection title="Desserts" items={desserts} />
-        <MenuSection title="Beverages" items={beverages} />
+        <MenuSection title="Comfort Food" items={comfortFood} />
+        <MenuSection title="Signature Dishes" items={tajSignatureDishes} />
       </div>
 
       <Chatbot />
     </div>
-  )
+  );
 }
-
