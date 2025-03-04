@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --royal-blue: #1e3a8a;
+  --gold: #eab308;
+  --deep-red: #9f1239;
+  --cream: #fffbeb;
+  --dark-blue: #172554;
+}
+
+@layer base {
+  body {
+    @apply bg-cream text-gray-900;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-playfair;
+  }
+
+  p,
+  a,
+  button,
+  input,
+  textarea {
+    @apply font-montserrat;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-royal-blue text-white px-6 py-3 rounded-md font-medium transition-all hover:bg-dark-blue shadow-md;
+  }
+
+  .btn-secondary {
+    @apply bg-transparent border-2 border-royal-blue text-royal-blue px-6 py-3 rounded-md font-medium transition-all hover:bg-royal-blue hover:text-white;
+  }
+
+  .section-title {
+    @apply text-4xl md:text-5xl font-playfair font-bold text-royal-blue mb-8 text-center;
+  }
+
+  .section-subtitle {
+    @apply text-xl md:text-2xl font-playfair text-deep-red mb-12 text-center;
+  }
+
+  .card {
+    @apply bg-white rounded-lg shadow-lg p-6 transition-transform duration-300 hover:shadow-xl hover:-translate-y-1;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-royal-blue;
+  }
+}
+
+.font-playfair {
+  font-family: var(--font-playfair);
+}
+
+.font-montserrat {
+  font-family: var(--font-montserrat);
+}
+
+.bg-royal-blue {
+  background-color: var(--royal-blue);
+}
+
+.bg-gold {
+  background-color: var(--gold);
+}
+
+.bg-deep-red {
+  background-color: var(--deep-red);
+}
+
+.bg-cream {
+  background-color: var(--cream);
+}
+
+.bg-dark-blue {
+  background-color: var(--dark-blue);
+}
+
+.text-royal-blue {
+  color: var(--royal-blue);
+}
+
+.text-gold {
+  color: var(--gold);
+}
+
+.text-deep-red {
+  color: var(--deep-red);
+}
+
+.border-royal-blue {
+  border-color: var(--royal-blue);
+}
+
