@@ -43,10 +43,10 @@ export default function About() {
               />
             </div>
             <div className="relative h-64 rounded-lg overflow-hidden">
-              <Image src="/placeholder.svg?height=400&width=300" alt="Signature Dish" fill className="object-cover" />
+              <Image src="/about_3.jpeg?height=400&width=300" alt="Signature Dish" fill className="object-cover" />
             </div>
             <div className="relative h-64 rounded-lg overflow-hidden mt-8">
-              <Image src="/placeholder.svg?height=400&width=300" alt="Spices" fill className="object-cover" />
+              <Image src="/about_4.jpg?height=400&width=300" alt="Spices" fill className="object-cover" />
             </div>
           </div>
         </div>

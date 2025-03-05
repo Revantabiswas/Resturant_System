@@ -1,12 +1,22 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, UploadFile, File
 from typing import List, Optional
 from datetime import datetime, timedelta
 from pydantic import BaseModel
 from app.db.database import add_booking, get_bookings, check_availability
-from app.services.ai_service import process_inquiry, process_reservation_request
+from app.services.ai_service import process_inquiry, process_reservation_request, initialize_knowledge_base, set_vector_store
 from app.utils.config import get_max_capacity, initialize_knowledge_base
 
+import os
+
 router = APIRouter()
+
+# During app startup
+vector_store, message = initialize_knowledge_base()
+if vector_store:
+    set_vector_store(vector_store)
+    print(message)
+else:
+    print(f"Failed to initialize knowledge base: {message}")
 
 # Models for API request/response
 class BookingRequest(BaseModel):
@@ -104,23 +114,7 @@ async def get_all_bookings(date: Optional[str] = None):
     """Get all bookings or for a specific date"""
     try:
         bookings = get_bookings(date)
-        
-        # Convert to list of dictionaries
-        bookings_list = []
-        for booking in bookings:
-            bookings_list.append({
-                "id": booking[0],
-                "date": booking[1],
-                "time": booking[2],
-                "guests": booking[3],
-                "name": booking[4],
-                "email": booking[5],
-                "phone": booking[6],
-                "special_requests": booking[7],
-                "created_at": booking[8]
-            })
-        
-        return bookings_list
+        return bookings  # Already converted to dictionaries in get_bookings
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -139,14 +133,33 @@ async def check_table_availability(request: AvailabilityRequest):
 async def chat(request: ChatRequest):
     """Process a chat message"""
     try:
+        print(f"Chat request received: {request.message}")
+        
         # Check if it's a reservation request
-        if "reservation" in request.message.lower() or "book" in request.message.lower() or "table" in request.message.lower():
+        is_reservation = any(keyword in request.message.lower() for keyword in ["reservation", "book", "table"])
+        
+        if is_reservation:
+            print("Processing as reservation request")
             result = process_reservation_request(request.message)
         else:
+            print("Processing as general inquiry")
             result = process_inquiry(request.message)
         
+        print(f"Generated response (first 100 chars): {result[:100] if result else 'None'}")
         return ChatResponse(response=result)
     
+    except Exception as e:
+        print(f"Error in chat endpoint: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/chat-simple/", response_model=ChatResponse)
+async def chat_simple(request: ChatRequest):
+    """A simple chat endpoint that doesn't use the AI for testing"""
+    try:
+        # Simple echo response for testing
+        return ChatResponse(response=f"Echo: {request.message}\n\nThis is a test response from the server.")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -189,3 +202,18 @@ async def create_group_booking(request: MultiBookingRequest):
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/upload-pdf/")
+async def upload_pdf(file: UploadFile = File(...)):
+    """Upload a PDF file to be included in the knowledge base"""
+    file_location = f"app/data/pdf/{file.filename}"
+    os.makedirs(os.path.dirname(file_location), exist_ok=True)
+    
+    with open(file_location, "wb") as file_object:
+        file_object.write(file.file.read())
+    
+    # Reinitialize knowledge base with all PDFs in directory
+    pdf_files = [f"app/data/pdf/{f}" for f in os.listdir("app/data/pdf")]
+    initialize_knowledge_base(pdf_files)
+    
+    return {"filename": file.filename, "status": "File uploaded successfully"}
