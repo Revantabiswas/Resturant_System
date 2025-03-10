@@ -4,15 +4,15 @@
 
 :root {
   --royal-blue: #1e3a8a;
-  --gold: #eab308;
+  --gold: #daa520;
   --deep-red: #9f1239;
-  --cream: #fffbeb;
-  --dark-blue: #172554;
+  --cream: #f8f5f0;
+  --dark-blue: #0f172a;
 }
 
 @layer base {
   body {
-    @apply bg-cream text-gray-900;
+    @apply bg-cream text-gray-800;
   }
 
   h1,
@@ -35,11 +35,11 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-royal-blue text-white px-6 py-3 rounded-md font-medium transition-all hover:bg-dark-blue shadow-md;
+    @apply bg-royal-blue hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-md transition-colors shadow-md;
   }
 
   .btn-secondary {
-    @apply bg-transparent border-2 border-royal-blue text-royal-blue px-6 py-3 rounded-md font-medium transition-all hover:bg-royal-blue hover:text-white;
+    @apply bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-md transition-colors;
   }
 
   .section-title {
@@ -47,7 +47,7 @@
   }
 
   .section-subtitle {
-    @apply text-xl md:text-2xl font-playfair text-deep-red mb-12 text-center;
+    @apply text-xl font-playfair mb-12 text-center text-gray-600;
   }
 
   .card {
@@ -55,12 +55,12 @@
   }
 
   .input-field {
-    @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-royal-blue;
+    @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-royal-blue text-gray-700;
   }
 }
 
 .font-playfair {
-  font-family: var(--font-playfair);
+  font-family: 'Playfair Display', serif;
 }
 
 .font-montserrat {
@@ -103,3 +103,136 @@
   border-color: var(--royal-blue);
 }
 
+/* Splash screen animations */
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes rotateIn {
+  0% { transform: rotate(0deg) scale(0.5); opacity: 0; }
+  100% { transform: rotate(360deg) scale(1); opacity: 1; }
+}
+
+@keyframes scaleIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes loadBar {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+.splash-appear {
+  animation: fadeIn 1.5s ease forwards;
+}
+
+.splash-exit {
+  animation: fadeOut 1s ease forwards;
+}
+
+.mandala-spin {
+  animation: rotateIn 3s ease-out forwards;
+}
+
+.diya-float {
+  animation: float 3s infinite ease-in-out;
+}
+
+.loading-bar {
+  background-image: linear-gradient(
+    90deg, 
+    var(--gold) 0%, 
+    var(--deep-red) 50%, 
+    var(--gold) 100%
+  );
+  background-size: 1000px 100%;
+  animation: loadBar 4s ease-out forwards, shimmer 2s infinite linear;
+}
+
+.text-reveal {
+  opacity: 0;
+  animation: scaleIn 1s ease forwards;
+  animation-delay: 0.5s;
+}
+
+/* Smooth page transitions */
+.page-transition-enter {
+  opacity: 0;
+  transform: scale(0.98);
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.page-transition-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transform: scale(1.02);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* These animations can be used across the site for consistency */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Utility classes for animations */
+.animate-fade-in {
+  animation: fadeIn 0.8s ease forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}

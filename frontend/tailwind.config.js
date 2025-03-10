@@ -1,7 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
-  content: ["./pages/**/*.{js,jsx}", "./components/**/*.{js,jsx}", "./app/**/*.{js,jsx}", "*.{js,ts,jsx,tsx,mdx}"],
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
   theme: {
     extend: {
       colors: {
@@ -39,10 +43,10 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
         "royal-blue": "#1e3a8a",
-        gold: "#eab308",
+        gold: "#daa520",
         "deep-red": "#9f1239",
-        cream: "#fffbeb",
-        "dark-blue": "#172554",
+        cream: "#f8f5f0",
+        "dark-blue": "#0f172a",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -51,7 +55,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ["var(--font-montserrat)"],
-        playfair: ["var(--font-playfair)"],
+        playfair: ['"Playfair Display"', 'serif'],
         montserrat: ["var(--font-montserrat)"],
       },
       backgroundImage: {

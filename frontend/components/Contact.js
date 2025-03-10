@@ -143,8 +143,8 @@ export default function Contact() {
                   <MapPin className="mr-4 text-royal-blue" />
                   <div>
                     <h4 className="font-semibold">Address</h4>
-                    <p className="text-gray-700">123 Main Street</p>
-                    <p className="text-gray-700">New York, NY 10001</p>
+                    <p className="text-gray-700">123 Eros Building</p>
+                    <p className="text-gray-700">Nehru Place, New Delhi 10001</p>
                   </div>
                 </div>
 

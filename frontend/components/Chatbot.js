@@ -1,15 +1,14 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { MessageSquare, Send, X } from "lucide-react"
+import { MessageSquare, Send, X, Trash2 } from "lucide-react"
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false)
-  const [messages, setMessages] = useState([
-    { role: "bot", content: "Hello! Welcome to Royal Udaipur. How can I assist you today?" },
-  ])
+  const [messages, setMessages] = useState([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [sessionId, setSessionId] = useState(null)
   const messagesEndRef = useRef(null)
   const API_URL = process.env.NEXT_PUBLIC_API_URL
 
@@ -19,6 +18,24 @@ export default function Chatbot() {
 
   const handleInputChange = (e) => {
     setInput(e.target.value)
+  }
+
+  // Reset chat messages when component mounts
+  useEffect(() => {
+    setMessages([
+      { role: "bot", content: "Hello! Welcome to Royal Udaipur. How can I assist you today?" },
+    ])
+    // Clear session ID on component mount
+    setSessionId(null)
+  }, [])
+
+  // Function to clear chat history
+  const clearChat = () => {
+    setMessages([
+      { role: "bot", content: "Hello! Welcome to Royal Udaipur. How can I assist you today?" },
+    ])
+    // Generate a new session
+    setSessionId(null)
   }
 
   const handleSubmit = async (e) => {
@@ -34,12 +51,21 @@ export default function Chatbot() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          ...(sessionId && { "session-id": sessionId }),
         },
-        body: JSON.stringify({ message: input }),
+        body: JSON.stringify({
+          message: input,
+          session_id: sessionId
+        }),
       })
 
       const data = await response.json()
       setMessages((prev) => [...prev, { role: "bot", content: data.response }])
+      
+      // Save the session ID for future requests
+      if (data.session_id) {
+        setSessionId(data.session_id)
+      }
     } catch (error) {
       console.error("Error:", error)
       setMessages((prev) => [
@@ -48,10 +74,8 @@ export default function Chatbot() {
       ])
     } finally {
       setIsLoading(false)
+      setInput("")
     }
-
-    // Clear input
-    setInput("")
   }
 
   // Auto-scroll to bottom of messages
@@ -72,9 +96,18 @@ export default function Chatbot() {
       {/* Chat window */}
       {isOpen && (
         <div className="fixed bottom-24 right-6 w-80 md:w-96 bg-white rounded-lg shadow-xl z-50 flex flex-col overflow-hidden">
-          <div className="bg-royal-blue text-white p-4">
-            <h3 className="font-playfair font-semibold">Royal Udaipur Chat</h3>
-            <p className="text-sm text-gray-200">Ask us anything</p>
+          <div className="bg-royal-blue text-white p-4 flex justify-between items-center">
+            <div>
+              <h3 className="font-playfair font-semibold">Royal Udaipur Chat</h3>
+              <p className="text-sm text-gray-200">Ask us anything</p>
+            </div>
+            <button
+              onClick={clearChat} 
+              className="p-1 rounded hover:bg-blue-700 transition-colors"
+              title="Clear chat"
+            >
+              <Trash2 size={20} />
+            </button>
           </div>
 
           <div className="flex-grow p-4 h-80 overflow-y-auto">

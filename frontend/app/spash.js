@@ -1,0 +1,1 @@
+// This file should be deleted as it's been moved to /app/splash/page.js

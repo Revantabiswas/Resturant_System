@@ -40,7 +40,7 @@ export default function Navbar() {
             <NavLink href="/" label="Home" scrolled={scrolled} />
             <NavLink href="/#about" label="About" scrolled={scrolled} />
             <NavLink href="/menu" label="Menu" scrolled={scrolled} />
-            <NavLink href="/#reservation" label="Reservation" scrolled={scrolled} />
+            <NavLink href="/reservations" label="Reservation" scrolled={scrolled} />
             <NavLink href="/#contact" label="Contact" scrolled={scrolled} />
           </div>
 
@@ -61,7 +61,7 @@ export default function Navbar() {
               <MobileNavLink href="/" label="Home" onClick={() => setIsOpen(false)} />
               <MobileNavLink href="/#about" label="About" onClick={() => setIsOpen(false)} />
               <MobileNavLink href="/menu" label="Menu" onClick={() => setIsOpen(false)} />
-              <MobileNavLink href="/#reservation" label="Reservation" onClick={() => setIsOpen(false)} />
+              <MobileNavLink href="/reservations" label="Reservation" onClick={() => setIsOpen(false)} />
               <MobileNavLink href="/#contact" label="Contact" onClick={() => setIsOpen(false)} />
             </div>
           </div>

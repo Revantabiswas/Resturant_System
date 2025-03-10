@@ -60,8 +60,8 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact Info</h3>
             <ul className="space-y-2">
-              <li className="text-gray-300">123 Main Street</li>
-              <li className="text-gray-300">New York, NY 10001</li>
+              <li className="text-gray-300">123 Eros Building</li>
+              <li className="text-gray-300">Nehru Place, New Delhi 10001</li>
               <li className="text-gray-300">(555) 123-4567</li>
               <li className="text-gray-300">info@royaludaipur.com</li>
             </ul>

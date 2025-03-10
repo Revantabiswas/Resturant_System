@@ -119,7 +119,7 @@ export default function Reservation() {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="input-field"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-royal-blue text-gray-700"
                     />
                   </div>
 
@@ -135,7 +135,7 @@ export default function Reservation() {
                         value={formData.email}
                         onChange={handleChange}
                         required
-                        className="input-field"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-royal-blue text-gray-700"
                       />
                     </div>
                     <div>
@@ -149,7 +149,7 @@ export default function Reservation() {
                         value={formData.phone}
                         onChange={handleChange}
                         required
-                        className="input-field"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-royal-blue text-gray-700"
                       />
                     </div>
                   </div>
@@ -166,7 +166,7 @@ export default function Reservation() {
                         value={formData.date}
                         onChange={handleChange}
                         required
-                        className="input-field"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-royal-blue text-gray-700"
                       />
                     </div>
                     <div>
@@ -179,7 +179,7 @@ export default function Reservation() {
                         value={formData.time}
                         onChange={handleChange}
                         required
-                        className="input-field"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-royal-blue text-gray-700"
                       >
                         <option value="">Select Time</option>
                         <option value="5:00 PM">5:00 PM</option>
@@ -203,7 +203,7 @@ export default function Reservation() {
                         value={formData.guests}
                         onChange={handleChange}
                         required
-                        className="input-field"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-royal-blue text-gray-700"
                       >
                         {[...Array(10)].map((_, i) => (
                           <option key={i} value={i + 1}>
@@ -224,11 +224,11 @@ export default function Reservation() {
                       value={formData.specialRequests}
                       onChange={handleChange}
                       rows="3"
-                      className="input-field"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-royal-blue text-gray-700"
                     ></textarea>
                   </div>
 
-                  <button type="submit" className="btn-primary w-full">
+                  <button type="submit" className="w-full bg-royal-blue hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-md transition-colors">
                     Reserve Now
                   </button>
                 </form>

@@ -1,14 +1,17 @@
-from fastapi import APIRouter, HTTPException, Depends, UploadFile, File
-from typing import List, Optional
+from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Cookie, Header
+from typing import List, Optional, Dict
 from datetime import datetime, timedelta
 from pydantic import BaseModel
 from app.db.database import add_booking, get_bookings, check_availability
 from app.services.ai_service import process_inquiry, process_reservation_request, initialize_knowledge_base, set_vector_store
 from app.utils.config import get_max_capacity, initialize_knowledge_base
-
 import os
+import uuid
 
 router = APIRouter()
+
+# Track chat sessions (store temporarily in memory - would use redis or database in production)
+chat_sessions: Dict[str, datetime] = {}
 
 # During app startup
 vector_store, message = initialize_knowledge_base()
@@ -48,9 +51,11 @@ class AvailabilityResponse(BaseModel):
 
 class ChatRequest(BaseModel):
     message: str
+    session_id: Optional[str] = None  # Optional session ID from client
 
 class ChatResponse(BaseModel):
     response: str
+    session_id: str  # Return session ID to client
 
 class MultiBookingRequest(BaseModel):
     dates: List[str]
@@ -130,10 +135,23 @@ async def check_table_availability(request: AvailabilityRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/chat/", response_model=ChatResponse)
-async def chat(request: ChatRequest):
+async def chat(request: ChatRequest, session_id: Optional[str] = Header(None)):
     """Process a chat message"""
     try:
         print(f"Chat request received: {request.message}")
+        
+        # Get or create session ID
+        current_session_id = session_id or request.session_id or str(uuid.uuid4())
+        
+        # Update session timestamp or create new session
+        chat_sessions[current_session_id] = datetime.now()
+        
+        # Clean up old sessions (older than 1 hour)
+        current_time = datetime.now()
+        expired_sessions = [sid for sid, timestamp in chat_sessions.items() 
+                           if (current_time - timestamp).total_seconds() > 3600]
+        for sid in expired_sessions:
+            chat_sessions.pop(sid, None)
         
         # Check if it's a reservation request
         is_reservation = any(keyword in request.message.lower() for keyword in ["reservation", "book", "table"])
@@ -146,7 +164,7 @@ async def chat(request: ChatRequest):
             result = process_inquiry(request.message)
         
         print(f"Generated response (first 100 chars): {result[:100] if result else 'None'}")
-        return ChatResponse(response=result)
+        return ChatResponse(response=result, session_id=current_session_id)
     
     except Exception as e:
         print(f"Error in chat endpoint: {str(e)}")
@@ -159,7 +177,11 @@ async def chat_simple(request: ChatRequest):
     """A simple chat endpoint that doesn't use the AI for testing"""
     try:
         # Simple echo response for testing
-        return ChatResponse(response=f"Echo: {request.message}\n\nThis is a test response from the server.")
+        session_id = request.session_id or str(uuid.uuid4())
+        return ChatResponse(
+            response=f"Echo: {request.message}\n\nThis is a test response from the server.",
+            session_id=session_id
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
