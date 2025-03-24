@@ -3,7 +3,7 @@ from typing import List, Optional, Dict
 from datetime import datetime, timedelta
 from pydantic import BaseModel
 from app.db.database import add_booking, get_bookings, check_availability
-from app.services.ai_service import process_inquiry, process_reservation_request, initialize_knowledge_base, set_vector_store
+from app.services.ai_service import process_inquiry, process_reservation_request, initialize_knowledge_base, set_vector_store, convert_to_html
 from app.utils.config import get_max_capacity, initialize_knowledge_base
 import os
 import uuid
@@ -158,9 +158,11 @@ async def chat(request: ChatRequest, session_id: Optional[str] = Header(None)):
         
         if is_reservation:
             print("Processing as reservation request")
+            # Response already in HTML format
             result = process_reservation_request(request.message)
         else:
             print("Processing as general inquiry")
+            # Response already in HTML format
             result = process_inquiry(request.message)
         
         print(f"Generated response (first 100 chars): {result[:100] if result else 'None'}")
@@ -170,16 +172,39 @@ async def chat(request: ChatRequest, session_id: Optional[str] = Header(None)):
         print(f"Error in chat endpoint: {str(e)}")
         import traceback
         traceback.print_exc()
+        error_response = convert_to_html(f"I'm sorry, I encountered an error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/chat-simple/", response_model=ChatResponse)
 async def chat_simple(request: ChatRequest):
     """A simple chat endpoint that doesn't use the AI for testing"""
     try:
-        # Simple echo response for testing
+        # Simple echo response for testing with HTML formatting
         session_id = request.session_id or str(uuid.uuid4())
+        html_response = f"""
+        <h3>Echo: {request.message}</h3>
+        <p>This is a test response from the server with HTML formatting.</p>
+        <ul>
+            <li>Point 1: HTML formatting works</li>
+            <li>Point 2: Tables and lists are supported</li>
+        </ul>
+        <table border="1">
+            <tr>
+                <th>Feature</th>
+                <th>Status</th>
+            </tr>
+            <tr>
+                <td>HTML Support</td>
+                <td>Working</td>
+            </tr>
+            <tr>
+                <td>Formatting</td>
+                <td>Enabled</td>
+            </tr>
+        </table>
+        """
         return ChatResponse(
-            response=f"Echo: {request.message}\n\nThis is a test response from the server.",
+            response=html_response,
             session_id=session_id
         )
     except Exception as e:

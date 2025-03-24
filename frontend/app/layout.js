@@ -1,6 +1,15 @@
 import "./globals.css"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
+import dynamic from "next/dynamic"
+
+// Import AnimatePresence through dynamic import with ssr disabled
+const AnimatePresenceWrapper = dynamic(
+  () => import('@/components/AnimatePresenceWrapper'),
+  { ssr: false }
+)
+
+const CustomCursor = dynamic(() => import('@/components/CustomCursor'), { ssr: false })
 
 export const metadata = {
   title: "Royal Udaipur - Authentic Indian Restaurant",
@@ -13,13 +22,15 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
       <body className="bg-cream">
-        <Navbar />
-        {children}
-        <Footer />
+        <AnimatePresenceWrapper>
+          <Navbar />
+          {children}
+          <Footer />
+        </AnimatePresenceWrapper>
+        <CustomCursor />
       </body>
     </html>
   )
 }
-
 
 

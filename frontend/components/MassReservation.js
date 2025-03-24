@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Calendar, Users, Clock, Utensils, Heart, Music, Gift } from "lucide-react";
-// import api from "@/api";
+import api from "@/api";
 
 export default function MassReservation() {
   const [formData, setFormData] = useState({
@@ -73,11 +73,8 @@ export default function MassReservation() {
     setIsLoading(true);
 
     try {
-      // This would connect to your actual API
-      // await api.createGroupReservation(formData);
-      
-      // For now, simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Call the API to create a group reservation
+      await api.createGroupReservation(formData);
       
       setIsSubmitted(true);
       setIsLoading(false);

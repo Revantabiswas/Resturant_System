@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Calendar, Clock, Users } from "lucide-react"
+import api from "@/api"
 
 export default function Reservation() {
   const [formData, setFormData] = useState({
